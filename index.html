@@ -2,68 +2,84 @@
 <html lang="zh-CN">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>画板</title>
-    <link rel="stylesheet" href="/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>画板</title>
+  <link rel="stylesheet" href="/style.css">
 </head>
 
 <body>
-    <canvas id="canvas" width="200" height="200"> </canvas>
-    <script>
-        let canvas = document.getElementById('canvas');
-        canvas.width = document.documentElement.clientWidth
-        canvas.height = document.documentElement.clientHeight
-        let ctx = canvas.getContext('2d');
-        ctx.fillStyle = 'skyblue';
-        ctx.strokeStyle = 'black'
-        ctx.lineCap="round"
-        ctx.lineWidth = 7;
+<div class="area">
+  <button id="red" style="background-color:red;" onclick="changeColor()"></button>
+  <button id="orange" style="background-color:orange;" onclick="changeColor()"></button>
+  <button id="yellow" style="background-color:yellow;" onclick="changeColor()"></button>
+  <button id="green" style="background-color:green;" onclick="changeColor()"></button>
+  <button id="blue" style="background-color:blue;" onclick="changeColor()"></button>
+  <button id="indigo" style="background-color:indigo;" onclick="changeColor()"></button>
+<button id="purple" style="background-color:purple;" onclick="changeColor()"></button>
 
-        let painting = false
-        let last    
+</div>
+<canvas id="canvas" width="200" height="200"></canvas>
 
-        function drawLine(x1,y1,x2,y2){
-            ctx.beginPath();
-            ctx.moveTo(x1,y1);
-            ctx.lineTo(x2,y2);
-            ctx.stroke();
-        }
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    const button=document.getElementById('red')
+    function changeColor(){
+        console.log(event.target.id)
+        ctx.strokeStyle = event.target.id.toString();
+    }
+  let canvas = document.getElementById('canvas');
+  canvas.width = document.documentElement.clientWidth;
+  canvas.height = document.documentElement.clientHeight;
+  let ctx = canvas.getContext('2d');
+  ctx.fillStyle = 'skyblue';
+  ctx.lineCap = 'round';
+  ctx.lineWidth = 7;
 
-        var isTouchDevice = 'ontouchstart' in
-        document.documentElement;
-        if(isTouchDevice){
-            canvas.ontouchstart = (e) =>{
-                let x = e.touches[0].clientX
-                let y = e.touches[0].clientY
-                last = [x,y]
-            }
-            canvas.ontouchmove = (e) =>{
-                let x = e.touches[0].clientX
-                let y = e.touches[0].clientY
-                drawLine(last[0],last[1],x,y)
-                last = [x,y]
-            }
-        }else{
-            canvas.onmousedown = (e) => {
-            painting = true
-            last = [e.clientX,e.clientY]
-            }
+  let painting = false;
+  let last;
+
+  function drawLine(x1, y1, x2, y2) {
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    ctx.stroke();
+  }
+
+  var isTouchDevice = 'ontouchstart' in
+    document.documentElement;
+  if (isTouchDevice) {
+    canvas.ontouchstart = (e) => {
+      let x = e.touches[0].clientX;
+      let y = e.touches[0].clientY;
+      last = [x, y];
+    };
+    canvas.ontouchmove = (e) => {
+      let x = e.touches[0].clientX;
+      let y = e.touches[0].clientY;
+      drawLine(last[0], last[1], x, y);
+      last = [x, y];
+    };
+  } else {
+    canvas.onmousedown = (e) => {
+      painting = true;
+      last = [e.clientX, e.clientY];
+    };
 
 
-            canvas.onmousemove = (e) => {
-                if (painting === true) {
-                    drawLine(last[0],last[1],e.clientX,e.clientY)
-                    last = [e.clientX,e.clientY]
-                } 
-        }
-        canvas.onmouseup = () => {
-            painting = false
-        }
-        }
+    canvas.onmousemove = (e) => {
+      if (painting === true) {
+        drawLine(last[0], last[1], e.clientX, e.clientY);
+        last = [e.clientX, e.clientY];
+      }
+    };
+    canvas.onmouseup = () => {
+      painting = false;
+    };
+  }
 
 
-    </script>
+</script>
 
 </body>
 
